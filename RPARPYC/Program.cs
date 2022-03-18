@@ -85,7 +85,13 @@ namespace RPARPYC
             {
                 Directory.Delete(rpatool);
             }
-
+            File.AppendAllText("rpatool.tmp", rpatool01);
+            File.AppendAllText("rpatool.tmp", rpatool02);
+            File.AppendAllText("rpatool.tmp", rpatool03);
+            File.AppendAllText("rpatool.tmp", rpatool04);
+            File.AppendAllText("rpatool.tmp", rpatool05);
+            File.AppendAllText("rpatool.tmp", rpatool06);
+            //foreach () ;
         }
     }
 }
