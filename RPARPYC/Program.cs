@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 
+
 namespace RPARPYC
 {
     class Program
@@ -85,13 +86,25 @@ namespace RPARPYC
             {
                 Directory.Delete(rpatool);
             }
+            rpatool01 = "[" + rpatool01 + "]" + "^" + "&";
+            rpatool02 = "[" + rpatool02 + "]" + "^" + "&";
+            rpatool03 = "[" + rpatool03 + "]" + "^" + "&";
+            rpatool04 = "[" + rpatool04 + "]" + "^" + "&";
+            rpatool05 = "[" + rpatool05 + "]" + "^" + "&";
+            rpatool06 = "[" + rpatool06 + "]" + "^" + "&";
             File.AppendAllText("rpatool.tmp", rpatool01);
             File.AppendAllText("rpatool.tmp", rpatool02);
             File.AppendAllText("rpatool.tmp", rpatool03);
             File.AppendAllText("rpatool.tmp", rpatool04);
             File.AppendAllText("rpatool.tmp", rpatool05);
             File.AppendAllText("rpatool.tmp", rpatool06);
-            //foreach () ;
+
+            /*StreamReader rptool = new StreamReader("rpatool.tmp");
+
+            while (!rptool.EndOfStream)
+            {
+                string str = rptool.ReadLine();
+            }*/
         }
     }
 }
