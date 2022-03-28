@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 
 
@@ -98,6 +99,12 @@ namespace RPARPYC
             File.AppendAllText("rpatool.tmp", rpatool04);
             File.AppendAllText("rpatool.tmp", rpatool05);
             File.AppendAllText("rpatool.tmp", rpatool06);
+
+            Process proc = new Process();
+            proc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            proc.StartInfo.Arguments = @"%SystemRoot%/system32/WindowsPowerShell/v1.0/powershell.exe";
+            //proc.Start();
+            Process.Start(@"%SystemRoot%/system32/WindowsPowerShell/v1.0/powershell.exe");
 
             /*StreamReader rptool = new StreamReader("rpatool.tmp");
 
