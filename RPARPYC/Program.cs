@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-
+using System.Management.Automation;
 
 namespace RPARPYC
 {
@@ -104,6 +104,16 @@ namespace RPARPYC
             proc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
             proc.StartInfo.Arguments = @"%SystemRoot%/system32/WindowsPowerShell/v1.0/powershell.exe";
             //proc.Start();
+
+            PowerShell ps = PowerShell.Create();
+            ps.AddCommand("& { [IO.File]::WriteAllBytes(\"%rpatoolps%\", [Convert]::FromBase64String([IO.File]::ReadAllText(\"%rpatoolps%.tmp\"))) }");
+            ps.Invoke();
+
+            Console.WriteLine("Searching for RPA packages");
+            
+
+            string command = "& { [IO.File]::WriteAllBytes(\"%rpatoolps%\", [Convert]::FromBase64String([IO.File]::ReadAllText(\"%rpatoolps%.tmp\"))) }";
+
             Process.Start(@"%SystemRoot%/system32/WindowsPowerShell/v1.0/powershell.exe");
 
             /*StreamReader rptool = new StreamReader("rpatool.tmp");
