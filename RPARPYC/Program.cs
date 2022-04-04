@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Management.Automation;
 
+
 namespace RPARPYC
 {
     class Program
@@ -115,7 +116,9 @@ namespace RPARPYC
             foreach (var file in result)
             {
                 Console.WriteLine(file);
+                
             }
+
             /*string command = "& { [IO.File]::WriteAllBytes(\"%rpatoolps%\", [Convert]::FromBase64String([IO.File]::ReadAllText(\"%rpatoolps%.tmp\"))) }";
 
             Process.Start(@"%SystemRoot%/system32/WindowsPowerShell/v1.0/powershell.exe");*/

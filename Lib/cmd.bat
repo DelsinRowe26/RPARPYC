@@ -1,0 +1,1 @@
+rpaextractor -x ИМЯ_ФАЙЛА.rpa -o NAME
