@@ -48,7 +48,8 @@ namespace RPARPYC
             {
                 Console.WriteLine("! Error: Powershell is required, unable to continue.\n This is included in Windows 7, 8, 10. XP/Vista users can\n download it here: http://support.microsoft.com/kb/968929");
             }
-            string path = @"C:\119ПКС\DelsinRowe\Фильмы\DaisukiDaYo-Inspring-1.0-win";//переменаая для пути
+            //string path = @"C:\119ПКС\DelsinRowe\Фильмы\DaisukiDaYo-Inspring-1.0-win";//переменаая для пути
+            string path = @"D:\Новая папка\Фильмы\DaisukiDaYo-Inspring-1.0-win";//переменаая для пути
             string currentdir = Path.GetFullPath(path);
             string pythondir = currentdir + @"\lib\windows-i686\";
             string renpydir = currentdir + @"\renpy\";
@@ -81,6 +82,8 @@ namespace RPARPYC
         static void extract(string currentdir, string pythondir, string renpydir, string gamedir)
         {
             string rpatool = currentdir + "_rpatool.py";
+            string rpatool2 = @"D:\Новая папка\Фильмы\DaisukiDaYo-Inspring-1.0-win\_rpatool.py";
+            string file1, file2;
             if (File.Exists(rpatool + ".tmp"))
             {
                 File.Delete(rpatool + ".tmp");
@@ -95,12 +98,12 @@ namespace RPARPYC
             rpatool04 = "[" + rpatool04 + "]" + "^" + "&";
             rpatool05 = "[" + rpatool05 + "]" + "^" + "&";
             rpatool06 = "[" + rpatool06 + "]" + "^" + "&";
-            File.AppendAllText("rpatool.tmp", rpatool01);
-            File.AppendAllText("rpatool.tmp", rpatool02);
-            File.AppendAllText("rpatool.tmp", rpatool03);
-            File.AppendAllText("rpatool.tmp", rpatool04);
-            File.AppendAllText("rpatool.tmp", rpatool05);
-            File.AppendAllText("rpatool.tmp", rpatool06);
+            File.AppendAllText(rpatool2, rpatool01 + "\n");
+            File.AppendAllText(rpatool2, rpatool02 + "\n");
+            File.AppendAllText(rpatool2, rpatool03 + "\n");
+            File.AppendAllText(rpatool2, rpatool04 + "\n");
+            File.AppendAllText(rpatool2, rpatool05 + "\n");
+            File.AppendAllText(rpatool2, rpatool06 + "\n");
 
             Process proc = new Process();
             proc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
@@ -116,7 +119,13 @@ namespace RPARPYC
             foreach (var file in result)
             {
                 Console.WriteLine(file);
-                
+                var fileSize = new FileInfo(file).Length;
+                Console.WriteLine(fileSize);
+                //Console.WriteLine(rpatool2);
+                file1 = file.Substring(56);
+                file2 = rpatool2.Substring(51);
+                //Console.WriteLine(file2);
+                Process.Start(pythondir + "python.exe -O " + file2 + " -x " + file1);
             }
 
             /*string command = "& { [IO.File]::WriteAllBytes(\"%rpatoolps%\", [Convert]::FromBase64String([IO.File]::ReadAllText(\"%rpatoolps%.tmp\"))) }";
