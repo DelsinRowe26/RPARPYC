@@ -122,10 +122,10 @@ namespace RPARPYC
                 var fileSize = new FileInfo(file).Length;
                 Console.WriteLine(fileSize);
                 //Console.WriteLine(rpatool2);
-                file1 = file.Substring(56);
-                file2 = rpatool2.Substring(51);
+                //file1 = file.Substring(56);
+                //file2 = rpatool2.Substring(51);
                 //Console.WriteLine(file2);
-                Process.Start(pythondir + "python.exe -O " + file2 + " -x " + file1);
+                Process.Start(pythondir + "python.exe -O " + rpatool2 + " -x " + file);
             }
 
             /*string command = "& { [IO.File]::WriteAllBytes(\"%rpatoolps%\", [Convert]::FromBase64String([IO.File]::ReadAllText(\"%rpatoolps%.tmp\"))) }";
