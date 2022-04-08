@@ -126,7 +126,7 @@ namespace RPARPYC
                 //file2 = rpatool2.Substring(51);
                 //Console.WriteLine(file2);
                 Process.Start(pythondir + "python.exe -O " + rpatool2 + " -x " + file);
-            }
+            }//не работает хз почему
 
             /*string command = "& { [IO.File]::WriteAllBytes(\"%rpatoolps%\", [Convert]::FromBase64String([IO.File]::ReadAllText(\"%rpatoolps%.tmp\"))) }";
 
