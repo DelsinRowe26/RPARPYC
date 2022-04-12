@@ -51,7 +51,7 @@ namespace RPARPYC
             //string path = @"C:\119ПКС\DelsinRowe\Фильмы\DaisukiDaYo-Inspring-1.0-win";//переменаая для пути
             string path = @"D:\Новая папка\Фильмы\DaisukiDaYo-Inspring-1.0-win";//переменаая для пути
             string currentdir = Path.GetFullPath(path);
-            string pythondir = currentdir + @"\lib\windows-i686\";
+            string pythondir = path + @"\lib\windows-i686\";
             string renpydir = currentdir + @"\renpy\";
             string gamedir = currentdir + @"\game\";
             if (Directory.Exists("game") && Directory.Exists("lib") && Directory.Exists("renpy"))
@@ -92,13 +92,13 @@ namespace RPARPYC
             {
                 Directory.Delete(rpatool);
             }
-            rpatool01 = "[" + rpatool01 + "]" + "^" + "&";
+            /*rpatool01 = "[" + rpatool01 + "]" + "^" + "&";
             rpatool02 = "[" + rpatool02 + "]" + "^" + "&";
             rpatool03 = "[" + rpatool03 + "]" + "^" + "&";
             rpatool04 = "[" + rpatool04 + "]" + "^" + "&";
             rpatool05 = "[" + rpatool05 + "]" + "^" + "&";
-            rpatool06 = "[" + rpatool06 + "]" + "^" + "&";
-            File.AppendAllText(rpatool2, rpatool01 + "\n");
+            rpatool06 = "[" + rpatool06 + "]" + "^" + "&";*/
+            //File.AppendAllText(rpatool2, rpatool01 + "\n");
             File.AppendAllText(rpatool2, rpatool02 + "\n");
             File.AppendAllText(rpatool2, rpatool03 + "\n");
             File.AppendAllText(rpatool2, rpatool04 + "\n");
@@ -122,11 +122,14 @@ namespace RPARPYC
                 var fileSize = new FileInfo(file).Length;
                 Console.WriteLine(fileSize);
                 //Console.WriteLine(rpatool2);
-                //file1 = file.Substring(56);
-                //file2 = rpatool2.Substring(51);
+                file1 = file.Substring(56);
+                file2 = rpatool2.Substring(51);
                 //Console.WriteLine(file2);
-                Process.Start(pythondir + "python.exe -O " + rpatool2 + " -x " + file);
-            }//не работает хз почему
+                Process.Start('"' + pythondir + "python.exe" + '"' + " -O " + '"' + file2 + '"' + " -x " + '"' + file1 + '"');
+            }
+
+            Console.WriteLine("Cleaning up temporary files...");
+            File.Delete(rpatool2);
 
             /*string command = "& { [IO.File]::WriteAllBytes(\"%rpatoolps%\", [Convert]::FromBase64String([IO.File]::ReadAllText(\"%rpatoolps%.tmp\"))) }";
 
