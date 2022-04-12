@@ -165,12 +165,36 @@ namespace RPARPYC
             }
             if (File.Exists(decompilerdir))
             {
-                Process.Start("/Q /S " + '"' + decompilerdir + '"');
+                Process.Start("rmdir /Q /S " + '"' + decompilerdir + '"');
             }
             if (File.Exists(unrpycpy))
             {
                 File.Delete(unrpycpy);
             }
+
+            //File.AppendAllText(decompcab, decompcab01 + "\n");
+            File.AppendAllText(decompcab, decompcab02 + "\n");
+            File.AppendAllText(decompcab, decompcab03 + "\n");
+            File.AppendAllText(decompcab, decompcab04 + "\n");
+            File.AppendAllText(decompcab, decompcab05 + "\n");
+            File.AppendAllText(decompcab, decompcab06 + "\n");
+            File.AppendAllText(decompcab, decompcab07 + "\n");
+            File.AppendAllText(decompcab, decompcab08 + "\n");
+            File.AppendAllText(decompcab, decompcab09 + "\n");
+            File.AppendAllText(decompcab, decompcab10 + "\n");
+            File.AppendAllText(decompcab, decompcab11 + "\n");
+            File.AppendAllText(decompcab, decompcab12 + "\n");
+            File.AppendAllText(decompcab, decompcab13 + "\n");
+            File.AppendAllText(decompcab, decompcab14 + "\n");
+            File.AppendAllText(decompcab, decompcab15 + "\n");
+            File.AppendAllText(decompcab, decompcab16 + "\n");
+
+            PowerShell ps = PowerShell.Create();
+            ps.AddCommand("& { [IO.File]::WriteAllBytes(\"%decompcabps%\", [Convert]::FromBase64String([IO.File]::ReadAllText(\"%decompcabps%.tmp\"))) }");
+            //ps.Invoke();
+
+            Console.WriteLine("Extracting _decomp.cab...");
+            Process.Start("mkdir " + '"' + decompilerdir + '"');
         }
         static void finish()
         {
