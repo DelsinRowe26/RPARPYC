@@ -76,14 +76,16 @@ namespace RPARPYC
             {
                 Console.WriteLine("! Error: Cannot locate python.exe, unable to continue. Are you sure we're in the game's root or game directory?");
             }
-            extract(currentdir, pythondir, renpydir, gamedir);
+            extract(currentdir, pythondir, gamedir);
+
         }
 
-        static void extract(string currentdir, string pythondir, string renpydir, string gamedir)
+        static void extract(string currentdir, string pythondir, string gamedir)
         {
             string rpatool = currentdir + "_rpatool.py";
             string rpatool2 = @"D:\Новая папка\Фильмы\DaisukiDaYo-Inspring-1.0-win\_rpatool.py";
             string file1, file2;
+            int i = 0;
             if (File.Exists(rpatool + ".tmp"))
             {
                 File.Delete(rpatool + ".tmp");
@@ -123,13 +125,16 @@ namespace RPARPYC
                 Console.WriteLine(fileSize);
                 //Console.WriteLine(rpatool2);
                 file1 = file.Substring(56);
-                file2 = rpatool2.Substring(51);
+                // = rpatool2.Substring(51);
                 //Console.WriteLine(file2);
-                Process.Start('"' + pythondir + "python.exe" + '"' + " -O " + '"' + file2 + '"' + " -x " + '"' + file1 + '"');
+                Process.Start('"' + pythondir + "python.exe" + '"' + " -O " + '"' + rpatool2 + '"' + " -x " + '"' + file1 + '"');
+                i++;
             }
 
-            Console.WriteLine("Cleaning up temporary files...");
-            File.Delete(rpatool2);
+            //Console.WriteLine("Cleaning up temporary files...");
+            //File.Delete(rpatool2);
+            
+            
 
             /*string command = "& { [IO.File]::WriteAllBytes(\"%rpatoolps%\", [Convert]::FromBase64String([IO.File]::ReadAllText(\"%rpatoolps%.tmp\"))) }";
 
@@ -141,6 +146,37 @@ namespace RPARPYC
             {
                 string str = rptool.ReadLine();
             }*/
+        }
+
+        static void decompile(string currentdir, string renpydir, string gamedir)
+        {
+            string decompcab = currentdir + "_decomp.cab";
+            string decompilerdir = currentdir + @"decompiler\";
+            string unrpycpy = currentdir + "unrpyc.py";
+            string deobfuscate = currentdir + "deobfuscate.py";
+            if(!File.Exists(gamedir + "*.rpyc"))
+            {
+                Console.WriteLine("No .rpyc files found in " + gamedir + "!");
+                finish();
+            }
+            if (File.Exists(decompcab))
+            {
+                File.Delete(decompcab);
+            }
+            if (File.Exists(decompilerdir))
+            {
+                Process.Start("/Q /S " + '"' + decompilerdir + '"');
+            }
+            if (File.Exists(unrpycpy))
+            {
+                File.Delete(unrpycpy);
+            }
+        }
+        static void finish()
+        {
+            Console.WriteLine("----------------------------------------------------");
+            Console.WriteLine(".");
+            Console.WriteLine("Finished!");
         }
     }
 }
