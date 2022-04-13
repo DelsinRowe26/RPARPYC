@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Management.Automation;
 using System.Text;
+using System.Threading;
 
 
 namespace RPARPYC
@@ -130,7 +131,8 @@ namespace RPARPYC
                 Console.WriteLine(fileSize);
                 //Console.WriteLine(rpatool2);
                 file1 = file.Substring(56);
-                // = rpatool2.Substring(51);
+                //file2 = rpatool2.Remove(62, 4);
+                //Thread.Sleep(1000);
                 //Console.WriteLine(file2);
                 Process.Start('"' + pythondir + "python.exe" + '"' + " -O " + '"' + rpatool2 + '"' + " -x " + '"' + file1 + '"');
                 i++;
@@ -216,7 +218,13 @@ namespace RPARPYC
             var result = Directory.EnumerateFiles(gamedir, "*.rpyc");
             foreach (var file in result)
             {
-                Console.WriteLine(file);
+                if (File.Exists(file)) {
+                    Console.WriteLine(file);
+                    Console.WriteLine("Decompiling");
+                    var fileSize = new FileInfo(file).Length;
+                    Console.WriteLine(fileSize);
+
+                }
             }
         }
         static void finish()
