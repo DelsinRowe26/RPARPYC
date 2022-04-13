@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Management.Automation;
 using System.Text;
+using System.Windows;
 using System.Threading;
 
 
@@ -44,6 +45,7 @@ namespace RPARPYC
         static string rpatool04 = "c2V0KSkpDQogICAgICAgICMgV2UncmUgZG9uZSwgY2xvc2UgaXQuDQogICAgICAgIGFyY2hpdmUuY2xvc2UoKQ0KDQogICAgICAgICMgUmVsb2FkIHRoZSBmaWxlIGluIG91ciBpbm5lciBkYXRhYmFzZS4NCiAgICAgICAgc2VsZi5sb2FkKGZpbGVuYW1lKQ0KDQppZiBfX25hbWVfXyA9PSAiX19tYWluX18iOg0KICAgIGltcG9ydCBhcmdwYXJzZQ0KDQogICAgcGFyc2VyID0gYXJncGFyc2UuQXJndW1lbnRQYXJzZXIoDQogICAgICAgIGRlc2NyaXB0aW9uPSdBIHRvb2wgZm9yIHdvcmtpbmcgd2l0aCBSZW5cJ1B5IGFyY2hpdmUgZmlsZXMuJywNCiAgICAgICAgZXBpbG9nPSdUaGUgRklMRSBhcmd1bWVudCBjYW4gb3B0aW9uYWxseSBiZSBpbiBBUkNISVZFPVJFQUwgZm9ybWF0LCBtYXBwaW5nIGEgZmlsZSBpbiB0aGUgYXJjaGl2ZSBmaWxlIHN5c3RlbSB0byBhIGZpbGUgb24geW91ciByZWFsIGZpbGUgc3lzdGVtLiBBbiBleGFtcGxlIG9mIHRoaXM6IHJwYXRvb2wgLXggdGVzdC5ycGEgc2NyaXB0LnJweWM9L2hvbWUvZm9vL3Rlc3QucnB5YycsDQogICAgICAgIGFkZF9oZWxwPUZhbHNlKQ0KDQogICAgcGFyc2VyLmFkZF9hcmd1bWVudCgnYXJjaGl2ZScsIG1ldGF2YXI9J0FSQ0hJVkUnLCBoZWxwPSdUaGUgUmVuXCdweSBhcmNoaXZlIGZpbGUgdG8gb3BlcmF0ZSBvbi4nKQ0KICAgIHBhcnNlci5hZGRfYXJndW1lbnQoJ2ZpbGVzJywgbWV0YXZhcj0nRklMRScsIG5hcmdzPScqJywgYWN0aW9uPSdhcHBlbmQnLCBoZWxwPSdaZXJvIG9yIG1vcmUgZmlsZXMgdG8gb3BlcmF0ZSBvbi4nKQ0KDQogICAgcGFyc2VyLmFkZF9hcmd1bWVudCgnLWwnLCAnLS1saXN0JywgYWN0aW9uPSdzdG9yZV90cnVlJywgaGVscD0nTGlzdCBmaWxlcyBpbiBhcmNoaXZlIEFSQ0hJVkUuJykNCiAgICBwYXJzZXIuYWRkX2FyZ3VtZW50KCcteCcsICctLWV4dHJhY3QnLCBhY3Rpb249J3N0b3JlX3RydWUnLCBoZWxwPSdFeHRyYWN0IEZJTEVzIGZyb20gQVJDSElWRS4nKQ0KICAgIHBhcnNlci5hZGRfYXJndW1lbnQoJy1jJywgJy0tY3JlYXRlJywgYWN0aW9uPSdzdG9yZV90cnVlJywgaGVscD0nQ3JlYXRpdmUgQVJDSElWRSBmcm9tIEZJTEVzLicpDQogICAgcGFyc2VyLmFkZF9hcmd1bWVudCgnLWQnLCAnLS1kZWxldGUnLCBhY3Rpb249J3N0b3JlX3RydWUnLCBoZWxwPSdEZWxldGUgRklMRXMgZnJvbSBBUkNISVZFLicpDQogICAgcGFyc2VyLmFkZF9hcmd1bWVudCgnLWEnLCAnLS1hcHBlbmQnLCBhY3Rpb249J3N0b3JlX3RydWUnLCBoZWxwPSdBcHBlbmQgRklMRXMgdG8gQVJDSElWRS4nKQ0KDQogICAgcGFyc2VyLmFkZF9hcmd1bWVudCgnLTInLCAnLS10d28nLCBhY3Rpb249J3N0b3JlX3RydWUnLCBoZWxwPSdVc2UgdGhlIFJQQXYyIGZvcm1hdCBmb3IgY3JlYXRpbmcvYXBwZW5kaW5nIHRvIGFyY2hpdmVzLicpDQogICAgcGFyc2VyLmFkZF9hcmd1bWVudCgnLTMnLCAnLS10aHJlZScsIGFjdGlvbj0nc3RvcmVfdHJ1ZScsIGhlbHA9J1VzZSB0aGUgUlBBdjMgZm9ybWF0IGZvciBjcmVhdGluZy9hcHBlbmRpbmcgdG8gYXJjaGl2ZXMgKGRlZmF1bHQpLicpDQoNCiAgICBwYXJzZXIuYWRkX2FyZ3VtZW50KCctaycsICctLWtleScsIG1ldGF2YXI9J0tFWScsIGhlbHA9J1RoZSBvYmZ1c2NhdGlvbiBrZXkgdXNlZCBmb3IgY3JlYXRpbmcgUlBBdjMgYXJjaGl2ZXMsIGluIGhleGFkZWNpbWFsIChkZWZhdWx0OiAweERFQURCRUVGKS4nKQ0KICAgIHBhcnNlci5hZGRfYXJndW1lbnQoJy1wJywgJy0tcGFkZGluZycsIG1ldGF2YXI9J0NPVU5UJywgaGVscD0nVGhlIG1heGltdW0gbnVtYmVyIG9mIGJ5dGVzIG9mIHBhZGRpbmcgdG8gYWRkIGJldHdlZW4gZmlsZXMgKGRlZmF1bHQ6IDApLicpDQogICAgcGFyc2VyLmFkZF9hcmd1bWVudCgnLW8nLCAnLS1vdXRmaWxlJywgaGVscD0nQW4gYWx0ZXJuYXRpdmUgb3V0cHV0IGFyY2hpdmUgZmlsZSB3aGVuIGFwcGVuZGluZyB0byBvciBkZWxldGluZyBmcm9tIGFyY2hpdmVzLCBvciBvdXRwdXQgZGlyZWN0b3J5IHdoZW4gZXh0cmFjdGluZy4nKQ0KDQogICAgcGFyc2VyLmFkZF9hcmd1bWVudCgnLWgnLCAnLS1oZWxwJywgYWN0aW9uPSdoZWxwJywgaGVscD0nUHJpbnQgdGhpcyBoZWxwIGFuZCBleGl0LicpDQogICAgcGFyc2VyLmFkZF9hcmd1bWVudCgnLXYnLCAnLS12ZXJib3NlJywgYWN0aW9uPSdzdG9yZV90cnVlJywgaGVscD0nQmUgYSBiaXQgbW9yZSB2ZXJib3NlIHdoaWxlIHBlcmZvcm1pbmcgb3BlcmF0aW9ucy4nKQ0KICAgIHBhcnNlci5hZGRfYXJndW1lbnQoJy1WJywgJy0tdmVyc2lvbicsIGFjdGlvbj0ndmVyc2lvbicsIHZlcnNpb249J3JwYXRvb2wgdjAuOCcsIGhlbHA9J1Nob3cgdmVyc2lvbiBpbmZvcm1hdGlvbi4nKQ0KICAgIGFyZ3VtZW50cyA9IHBhcnNlci5wYXJzZV9hcmdzKCkNCg0KICAgICMgRGV0ZXJtaW5lIFJQQSB2ZXJzaW9uLg0KICAgIGlmIGFyZ3VtZW50cy50d286DQogICAgICAgIHZlcnNpb24gPSAyDQogICAgZWxzZToNCiAgICAgICAgdmVyc2lvbiA9IDMNCg0KICAgICMgRGV0ZXJtaW5lIFJQQXYzIGtleS4NCiAgICBpZiAna2V5JyBpbiBhcmd1bWVudHMgYW5kIGFyZ3VtZW50cy5rZXkgaXMgbm90IE5vbmU6DQogICAgICAgIGtleSA9IGludChhcmd1bWVudHMua2V5LCAxNikNCiAgICBlbHNlOg0KICAgICAgICBrZXkgPSAweERFQURCRUVGDQoNCiAgICAjIERldGVybWluZSBwYWRkaW5nIGJ5dGVzLg0KICAgIGlmICdwYWRkaW5nJyBpbiBhcmd1bWVudHMgYW5kIGFyZ3VtZW50cy5wYWRkaW5nIGlzIG5vdCBOb25lOg0KICAgICAgICBwYWRkaW5nID0gaW50KGFyZ3VtZW50cy5wYWRkaW5nKQ0KICAgIGVsc2U6DQogICAgICAgIHBhZGRpbmcgPSAwDQoNCiAgICAjIERldGVybWluZSBvdXRwdXQgZmlsZS9kaXJlY3RvcnkgYW5kIGlucHV0IGFyY2hpdmUNCiAgICBpZiBhcmd1bWVudHMuY3JlYXRlOg0KICAgICAgICBhcmNoaXZlID0gTm9uZQ0KICAgICAgICBvdXRwdXQgPSBfdW5pY29kZShhcmd1bWVudHMuYXJjaGl2ZSkNCiAgICBlbHNlOg0KICAgICAgICBhcmNoaXZlID0gX3VuaWNvZGUoYXJndW1lbnRzLmFyY2hpdmUpDQogICAgICAgIGlmICdvdXRmaWxlJyBpbiBhcmd1bWVudHMgYW5kIGFyZ3VtZW50cy5vdXRmaWxlIGlzIG5vdCBOb25lOg0KICAgICAgICAgICAgb3V0cHV0ID0gX3VuaWNvZGUoYXJndW1lbnRzLm91dGZpbGUpDQogICAgICAgIGVsc2U6DQogICAgICAgICAgICAjIERlZmF1bHQgb3V0cHV0IGRpcmVjdG9yeSBmb3IgZXh0cmFjdGlvbiBpcyB0aGUgY3VycmVudCBkaXJlY3RvcnkuDQogICAgICAgICAgICBpZiBhcmd1bWVudHMuZXh0cmFjdDoNCiAgICAgICAgICAgICAgICBvdXRwdXQgPSAnLicNCiAgICAgICAgICAgIGVsc2U6DQogICAgICAgICAgICAgICAgb3V0cHV0ID0gX3VuaWNvZGUoYXJndW1lbnRzLmFyY2hpdmUpDQoNCiAgICAjIE5vcm1hbGl6ZSBmaWxlcy4NCiAgICBpZiBsZW4oYXJndW1lbnRzLmZpbGVzKSA + IDAgYW5kIGlzaW5zdGFuY2UoYXJndW1lbnRzLmZpbGVzWzBdLCBsaXN0KToNCiAgICAgICAgYXJndW1lbnRzLmZpbGVzID0gYXJndW1lbnRzLmZpbGVzWzBdDQoNCiAgICB0cnk6DQogICAgICAgIGFyY2hpdmUgPSBSZW5QeUFyY2hpdmUoYXJjaGl2ZSwgcGFkbGVuZ3RoPXBhZGRpbmcsIGtleT1rZXksIHZlcnNpb249dmVy";
         static string rpatool05 = "c2lvbiwgdmVyYm9zZT1hcmd1bWVudHMudmVyYm9zZSkNCiAgICBleGNlcHQgSU9FcnJvciBhcyBlOg0KICAgICAgICBwcmludCgnQ291bGQgbm90IG9wZW4gYXJjaGl2ZSBmaWxlIHswfSBmb3IgcmVhZGluZzogezF9Jy5mb3JtYXQoYXJjaGl2ZSwgZSksIGZpbGU9c3lzLnN0ZGVycikNCiAgICAgICAgc3lzLmV4aXQoMSkNCg0KICAgIGlmIGFyZ3VtZW50cy5jcmVhdGUgb3IgYXJndW1lbnRzLmFwcGVuZDoNCiAgICAgICAgIyBXZSBuZWVkIHRoaXMgc2VwZXJhdGUgZnVuY3Rpb24gdG8gcmVjdXJzaXZlbHkgcHJvY2VzcyBkaXJlY3Rvcmllcy4NCiAgICAgICAgZGVmIGFkZF9maWxlKGZpbGVuYW1lKToNCiAgICAgICAgICAgICMgSWYgdGhlIGFyY2hpdmUgcGF0aCBkaWZmZXJzIGZyb20gdGhlIGFjdHVhbCBmaWxlIHBhdGgsIGFzIGdpdmVuIGluIHRoZSBhcmd1bWVudCwNCiAgICAgICAgICAgICMgZXh0cmFjdCB0aGUgYXJjaGl2ZSBwYXRoIGFuZCBhY3R1YWwgZmlsZSBwYXRoLg0KICAgICAgICAgICAgaWYgZmlsZW5hbWUuZmluZCgnPScpICE9IC0xOg0KICAgICAgICAgICAgICAgIChvdXRmaWxlLCBmaWxlbmFtZSkgPSBmaWxlbmFtZS5zcGxpdCgnPScsIDIpDQogICAgICAgICAgICBlbHNlOg0KICAgICAgICAgICAgICAgIG91dGZpbGUgPSBmaWxlbmFtZQ0KDQogICAgICAgICAgICBpZiBvcy5wYXRoLmlzZGlyKGZpbGVuYW1lKToNCiAgICAgICAgICAgICAgICBmb3IgZmlsZSBpbiBvcy5saXN0ZGlyKGZpbGVuYW1lKToNCiAgICAgICAgICAgICAgICAgICAgIyBXZSBuZWVkIHRvIGRvIHRoaXMgaW4gb3JkZXIgdG8gbWFpbnRhaW4gYSBwb3NzaWJsZSBBUkNISVZFPVJFQUwgbWFwcGluZyBiZXR3ZWVuIGRpcmVjdG9yaWVzLg0KICAgICAgICAgICAgICAgICAgICBhZGRfZmlsZShvdXRmaWxlICsgb3Muc2VwICsgZmlsZSArICc9JyArIGZpbGVuYW1lICsgb3Muc2VwICsgZmlsZSkNCiAgICAgICAgICAgIGVsc2U6DQogICAgICAgICAgICAgICAgdHJ5Og0KICAgICAgICAgICAgICAgICAgICB3aXRoIG9wZW4oZmlsZW5hbWUsICdyYicpIGFzIGZpbGU6DQogICAgICAgICAgICAgICAgICAgICAgICBhcmNoaXZlLmFkZChvdXRmaWxlLCBmaWxlLnJlYWQoKSkNCiAgICAgICAgICAgICAgICBleGNlcHQgRXhjZXB0aW9uIGFzIGU6DQogICAgICAgICAgICAgICAgICAgIHByaW50KCdDb3VsZCBub3QgYWRkIGZpbGUgezB9IHRvIGFyY2hpdmU6IHsxfScuZm9ybWF0KGZpbGVuYW1lLCBlKSwgZmlsZT1zeXMuc3RkZXJyKQ0KDQogICAgICAgICMgSXRlcmF0ZSBvdmVyIHRoZSBnaXZlbiBmaWxlcyB0byBhZGQgdG8gYXJjaGl2ZS4NCiAgICAgICAgZm9yIGZpbGVuYW1lIGluIGFyZ3VtZW50cy5maWxlczoNCiAgICAgICAgICAgIGFkZF9maWxlKF91bmljb2RlKGZpbGVuYW1lKSkNCg0KICAgICAgICAjIFNldCB2ZXJzaW9uIGZvciBzYXZpbmcsIGFuZCBzYXZlLg0KICAgICAgICBhcmNoaXZlLnZlcnNpb24gPSB2ZXJzaW9uDQogICAgICAgIHRyeToNCiAgICAgICAgICAgIGFyY2hpdmUuc2F2ZShvdXRwdXQpDQogICAgICAgIGV4Y2VwdCBFeGNlcHRpb24gYXMgZToNCiAgICAgICAgICAgIHByaW50KCdDb3VsZCBub3Qgc2F2ZSBhcmNoaXZlIGZpbGU6IHswfScuZm9ybWF0KGUpLCBmaWxlPXN5cy5zdGRlcnIpDQogICAgZWxpZiBhcmd1bWVudHMuZGVsZXRlOg0KICAgICAgICAjIEl0ZXJhdGUgb3ZlciB0aGUgZ2l2ZW4gZmlsZXMgdG8gZGVsZXRlIGZyb20gdGhlIGFyY2hpdmUuDQogICAgICAgIGZvciBmaWxlbmFtZSBpbiBhcmd1bWVudHMuZmlsZXM6DQogICAgICAgICAgICB0cnk6DQogICAgICAgICAgICAgICAgYXJjaGl2ZS5yZW1vdmUoZmlsZW5hbWUpDQogICAgICAgICAgICBleGNlcHQgRXhjZXB0aW9uIGFzIGU6DQogICAgICAgICAgICAgICAgcHJpbnQoJ0NvdWxkIG5vdCBkZWxldGUgZmlsZSB7MH0gZnJvbSBhcmNoaXZlOiB7MX0nLmZvcm1hdChmaWxlbmFtZSwgZSksIGZpbGU9c3lzLnN0ZGVycikNCg0KICAgICAgICAjIFNldCB2ZXJzaW9uIGZvciBzYXZpbmcsIGFuZCBzYXZlLg0KICAgICAgICBhcmNoaXZlLnZlcnNpb24gPSB2ZXJzaW9uDQogICAgICAgIHRyeToNCiAgICAgICAgICAgIGFyY2hpdmUuc2F2ZShvdXRwdXQpDQogICAgICAgIGV4Y2VwdCBFeGNlcHRpb24gYXMgZToNCiAgICAgICAgICAgIHByaW50KCdDb3VsZCBub3Qgc2F2ZSBhcmNoaXZlIGZpbGU6IHswfScuZm9ybWF0KGUpLCBmaWxlPXN5cy5zdGRlcnIpDQogICAgZWxpZiBhcmd1bWVudHMuZXh0cmFjdDoNCiAgICAgICAgIyBFaXRoZXIgZXh0cmFjdCB0aGUgZ2l2ZW4gZmlsZXMsIG9yIGFsbCBmaWxlcyBpZiBubyBmaWxlcyBhcmUgZ2l2ZW4uDQogICAgICAgIGlmIGxlbihhcmd1bWVudHMuZmlsZXMpID4gMDoNCiAgICAgICAgICAgIGZpbGVzID0gYXJndW1lbnRzLmZpbGVzDQogICAgICAgIGVsc2U6DQogICAgICAgICAgICBmaWxlcyA9IGFyY2hpdmUubGlzdCgpDQoNCiAgICAgICAgIyBDcmVhdGUgb3V0cHV0IGRpcmVjdG9yeSBpZiBub3QgcHJlc2VudC4NCiAgICAgICAgaWYgbm90IG9zLnBhdGguZXhpc3RzKG91dHB1dCk6DQogICAgICAgICAgICBvcy5tYWtlZGlycyhvdXRwdXQpDQoNCiAgICAgICAgIyBJdGVyYXRlIG92ZXIgZmlsZXMgdG8gZXh0cmFjdC4NCiAgICAgICAgZm9yIGZpbGVuYW1lIGluIGZpbGVzOg0KICAgICAgICAgICAgaWYgZmlsZW5hbWUuZmluZCgnPScpICE9IC0xOg0KICAgICAgICAgICAgICAgIChvdXRmaWxlLCBmaWxlbmFtZSkgPSBmaWxlbmFtZS5zcGxpdCgnPScsIDIpDQogICAgICAgICAgICBlbHNlOg0KICAgICAgICAgICAgICAgIG91dGZpbGUgPSBmaWxlbmFtZQ0KDQogICAgICAgICAgICB0cnk6DQogICAgICAgICAgICAgICAgY29udGVudHMgPSBhcmNoaXZlLnJlYWQoZmlsZW5hbWUpDQoNCiAgICAgICAgICAgICAgICAjIENyZWF0ZSBvdXRwdXQgZGlyZWN0b3J5IGZvciBmaWxlIGlmIG5vdCBwcmVzZW50Lg0KICAgICAgICAgICAgICAgIGlmIG5vdCBvcy5wYXRoLmV4aXN0cyhvcy5wYXRoLmRpcm5hbWUob3MucGF0aC5qb2luKG91dHB1dCwgb3V0ZmlsZSkpKToNCiAgICAgICAgICAgICAgICAgICAgb3MubWFrZWRpcnMob3MucGF0aC5kaXJuYW1lKG9zLnBhdGguam9pbihvdXRwdXQsIG91dGZpbGUpKSkNCg0KICAgICAgICAgICAgICAgIHdpdGggb3Blbihvcy5wYXRoLmpvaW4ob3V0cHV0LCBvdXRmaWxlKSwgJ3diJykgYXMgZmlsZToNCiAgICAgICAgICAgICAgICAgICAgZmlsZS53cml0ZShjb250ZW50cykNCiAgICAgICAgICAgIGV4Y2VwdCBFeGNlcHRpb24gYXMgZToNCiAgICAgICAgICAgICAgICBwcmludCgnQ291bGQgbm90IGV4dHJhY3QgZmlsZSB7MH0gZnJvbSBhcmNoaXZlOiB7MX0nLmZvcm1hdChmaWxlbmFtZSwgZSksIGZpbGU9c3lzLnN0ZGVycikNCiAgICBlbGlmIGFyZ3VtZW50cy5saXN0Og0KICAgICAgICAjIFByaW50IHRoZSBzb3J0ZWQgZmlsZSBsaXN0Lg0KICAgICAgICBsaXN0ID0gYXJjaGl2ZS5saXN0KCkNCiAgICAgICAgbGlzdC5zb3J0KCkNCiAgICAgICAgZm9yIGZpbGUgaW4gbGlzdDoNCiAgICAgICAgICAgIHByaW50KGZpbGUpDQogICAgZWxzZToNCiAgICAgICAgcHJpbnQoJ05vIG9wZXJhdGlvbiBnaXZlbiA6KCcpDQogICAgICAgIHByaW50KCdVc2UgezB9IC0taGVs";
         static string rpatool06 = "cCBmb3IgdXNhZ2UgZGV0YWlscy4nLmZvcm1hdChzeXMuYXJndlswXSkpDQoNCg==";
+        static string rpt, rpt1, decompdir;
 
         static void Main(string[] args)
         {
@@ -88,171 +90,214 @@ namespace RPARPYC
 
         static void extract(string currentdir, string pythondir, string gamedir)
         {
-            string rpatool = currentdir + "_rpatool.py";
-            string rpatool2 = @"D:\Новая папка\Фильмы\DaisukiDaYo-Inspring-1.0-win\_rpatool.py";
-            string rpatool3 = @"D:\Новая папка\Фильмы\DaisukiDaYo-Inspring-1.0-win\_rpatool.py.tmp";
-            string file1, file2;
-            int i = 0;
-            if (File.Exists(rpatool + ".tmp"))
+            try
             {
-                File.Delete(rpatool + ".tmp");
+                string rpatool = currentdir + "_rpatool.py";
+                string rpatool2 = @"D:\Новая папка\Фильмы\DaisukiDaYo-Inspring-1.0-win\_rpatool.py";
+                string rpatool3 = @"D:\Новая папка\Фильмы\DaisukiDaYo-Inspring-1.0-win\_rpatool.py.tmp";
+                string file1, file2;
+                int i = 0;
+                if (File.Exists(rpatool + ".tmp"))
+                {
+                    File.Delete(rpatool + ".tmp");
+                }
+                if (Directory.Exists(rpatool))
+                {
+                    Directory.Delete(rpatool);
+                }
+                /*rpatool01 = "[" + rpatool01 + "]" + "^" + "&";
+                rpatool02 = "[" + rpatool02 + "]" + "^" + "&";
+                rpatool03 = "[" + rpatool03 + "]" + "^" + "&";
+                rpatool04 = "[" + rpatool04 + "]" + "^" + "&";
+                rpatool05 = "[" + rpatool05 + "]" + "^" + "&";
+                rpatool06 = "[" + rpatool06 + "]" + "^" + "&";*/
+                //File.AppendAllText(rpatool2, rpatool01 + "\n");
+                File.AppendAllText(rpatool2, rpatool02 + "\n");
+                File.AppendAllText(rpatool2, rpatool03 + "\n");
+                File.AppendAllText(rpatool2, rpatool04 + "\n");
+                File.AppendAllText(rpatool2, rpatool05 + "\n");
+                File.AppendAllText(rpatool2, rpatool06 + "\n");
+
+                File.AppendAllText(rpatool3, rpatool02 + "\n");
+                File.AppendAllText(rpatool3, rpatool03 + "\n");
+                File.AppendAllText(rpatool3, rpatool04 + "\n");
+                File.AppendAllText(rpatool3, rpatool05 + "\n");
+                File.AppendAllText(rpatool3, rpatool06 + "\n");
+
+                Process proc = new Process();
+                proc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                proc.StartInfo.Arguments = @"%SystemRoot%/system32/WindowsPowerShell/v1.0/powershell.exe";
+                //proc.Start();
+
+                //PowerShell ps = PowerShell.Create();
+                //ps.AddCommand("& { [IO.File]::WriteAllBytes(\"%rpatoolps%\", [Convert]::FromBase64String([IO.File]::ReadAllText(\"%rpatoolps%.tmp\"))) }");
+                //ps.Invoke();
+
+                Process.Start('"' + "powershell.exe" + '"' + " -nologo -noprofile -noninteractive -command " + '"' + "& { [IO.File]::WriteAllBytes(\"" + rpatool2 + "\", [Convert]::FromBase64String([IO.File]::ReadAllText(\"" + rpatool3 + "\"))) }" + '"');
+
+                Console.WriteLine("Searching for RPA packages");
+                var result = Directory.EnumerateFiles(gamedir, "*.rpa");
+                foreach (var file in result)
+                {
+                    Console.WriteLine(file);
+                    var fileSize = new FileInfo(file).Length;
+                    Console.WriteLine(fileSize);
+                    //Console.WriteLine(rpatool2);
+                    file1 = file.Substring(56);
+                    //file2 = rpatool2.Remove(62, 4);
+                    //Thread.Sleep(1000);
+                    //Console.WriteLine(file2);
+                    Process.Start('"' + pythondir + "python.exe" + '"' + " -O " + '"' + rpatool2 + '"' + " -x " + '"' + file1 + '"');
+                }
+                rpt = rpatool2;
+                rpt1 = rpatool3;
+                //Console.WriteLine("Cleaning up temporary files...");
+                //File.Delete(rpatool2);
+
+
+
+                /*string command = "& { [IO.File]::WriteAllBytes(\"%rpatoolps%\", [Convert]::FromBase64String([IO.File]::ReadAllText(\"%rpatoolps%.tmp\"))) }";
+
+                Process.Start(@"%SystemRoot%/system32/WindowsPowerShell/v1.0/powershell.exe");*/
+
+                /*StreamReader rptool = new StreamReader("rpatool.tmp");
+
+                while (!rptool.EndOfStream)
+                {
+                    string str = rptool.ReadLine();
+                }*/
             }
-            if (Directory.Exists(rpatool))
+            catch
             {
-                Directory.Delete(rpatool);
+                Console.WriteLine("Error");
             }
-            /*rpatool01 = "[" + rpatool01 + "]" + "^" + "&";
-            rpatool02 = "[" + rpatool02 + "]" + "^" + "&";
-            rpatool03 = "[" + rpatool03 + "]" + "^" + "&";
-            rpatool04 = "[" + rpatool04 + "]" + "^" + "&";
-            rpatool05 = "[" + rpatool05 + "]" + "^" + "&";
-            rpatool06 = "[" + rpatool06 + "]" + "^" + "&";*/
-            //File.AppendAllText(rpatool2, rpatool01 + "\n");
-            File.AppendAllText(rpatool2, rpatool02 + "\n");
-            File.AppendAllText(rpatool2, rpatool03 + "\n");
-            File.AppendAllText(rpatool2, rpatool04 + "\n");
-            File.AppendAllText(rpatool2, rpatool05 + "\n");
-            File.AppendAllText(rpatool2, rpatool06 + "\n");
-
-            File.AppendAllText(rpatool3, rpatool02 + "\n");
-            File.AppendAllText(rpatool3, rpatool03 + "\n");
-            File.AppendAllText(rpatool3, rpatool04 + "\n");
-            File.AppendAllText(rpatool3, rpatool05 + "\n");
-            File.AppendAllText(rpatool3, rpatool06 + "\n");
-
-            Process proc = new Process();
-            proc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            proc.StartInfo.Arguments = @"%SystemRoot%/system32/WindowsPowerShell/v1.0/powershell.exe";
-            //proc.Start();
-
-            //PowerShell ps = PowerShell.Create();
-            //ps.AddCommand("& { [IO.File]::WriteAllBytes(\"%rpatoolps%\", [Convert]::FromBase64String([IO.File]::ReadAllText(\"%rpatoolps%.tmp\"))) }");
-            //ps.Invoke();
-
-            Process.Start('"' + "powershell.exe" + '"' + " -nologo -noprofile -noninteractive -command " + '"' + "& { [IO.File]::WriteAllBytes(\"" + rpatool2 + "\", [Convert]::FromBase64String([IO.File]::ReadAllText(\"" + rpatool3 + "\"))) }" + '"');
-
-            Console.WriteLine("Searching for RPA packages");
-            var result = Directory.EnumerateFiles(gamedir, "*.rpa");
-            foreach (var file in result)
+            finally
             {
-                Console.WriteLine(file);
-                var fileSize = new FileInfo(file).Length;
-                Console.WriteLine(fileSize);
-                //Console.WriteLine(rpatool2);
-                file1 = file.Substring(56);
-                //file2 = rpatool2.Remove(62, 4);
-                //Thread.Sleep(1000);
-                //Console.WriteLine(file2);
-                Process.Start('"' + pythondir + "python.exe" + '"' + " -O " + '"' + rpatool2 + '"' + " -x " + '"' + file1 + '"');
+                Console.WriteLine("Cleaning up temporary files...");
+                File.Delete(rpt);
+                File.Delete(rpt1);
             }
-
-            //Console.WriteLine("Cleaning up temporary files...");
-            //File.Delete(rpatool2);
-            
-            
-
-            /*string command = "& { [IO.File]::WriteAllBytes(\"%rpatoolps%\", [Convert]::FromBase64String([IO.File]::ReadAllText(\"%rpatoolps%.tmp\"))) }";
-
-            Process.Start(@"%SystemRoot%/system32/WindowsPowerShell/v1.0/powershell.exe");*/
-
-            /*StreamReader rptool = new StreamReader("rpatool.tmp");
-
-            while (!rptool.EndOfStream)
-            {
-                string str = rptool.ReadLine();
-            }*/
         }
 
         static void decompile(string currentdir, string pythondir, string renpydir, string gamedir)
         {
-            
-            string decompilerdir = currentdir + @"\decompiler\";
-            Directory.CreateDirectory(decompilerdir);
-            string decompcab = decompilerdir + "_decomp.cab";
-            string unrpycpy = decompilerdir + "unrpyc.py";
-            File.Create(unrpycpy);
-            string deobfuscate = decompilerdir + "deobfuscate.py";
-            if(File.Exists(gamedir + "*.rpyc"))
+            try
             {
-                Console.WriteLine("No .rpyc files found in " + gamedir + "!");
-                finish();
-            }
-            if (File.Exists(decompcab))
-            {
-                File.Delete(decompcab);
-            }
-            if (File.Exists(decompilerdir))
-            {
-                Process.Start("rmdir /Q /S " + '"' + decompilerdir + '"');
-            }
-            if (!File.Exists(unrpycpy))
-            {
-                File.Delete(unrpycpy);
-            }
-
-            //File.AppendAllText(decompcab, decompcab01 + "\n");
-            File.AppendAllText(decompcab, decompcab02 + "\n");
-            File.AppendAllText(decompcab, decompcab03 + "\n");
-            File.AppendAllText(decompcab, decompcab04 + "\n");
-            File.AppendAllText(decompcab, decompcab05 + "\n");
-            File.AppendAllText(decompcab, decompcab06 + "\n");
-            File.AppendAllText(decompcab, decompcab07 + "\n");
-            File.AppendAllText(decompcab, decompcab08 + "\n");
-            File.AppendAllText(decompcab, decompcab09 + "\n");
-            File.AppendAllText(decompcab, decompcab10 + "\n");
-            File.AppendAllText(decompcab, decompcab11 + "\n");
-            File.AppendAllText(decompcab, decompcab12 + "\n");
-            File.AppendAllText(decompcab, decompcab13 + "\n");
-            File.AppendAllText(decompcab, decompcab14 + "\n");
-            File.AppendAllText(decompcab, decompcab15 + "\n");
-            File.AppendAllText(decompcab, decompcab16 + "\n");
-
-            /*File.AppendAllText(unrpycpy, unrpyccab01 + "\n");
-            File.AppendAllText(unrpycpy, unrpyccab02 + "\n");
-            File.AppendAllText(unrpycpy, unrpyccab03 + "\n");
-            File.AppendAllText(unrpycpy, unrpyccab04 + "\n");
-            File.AppendAllText(unrpycpy, unrpyccab05 + "\n");
-            File.AppendAllText(unrpycpy, unrpyccab06 + "\n");
-            File.AppendAllText(unrpycpy, unrpyccab07 + "\n");
-            File.AppendAllText(unrpycpy, unrpyccab08 + "\n");
-            File.AppendAllText(unrpycpy, unrpyccab09 + "\n");
-            File.AppendAllText(unrpycpy, unrpyccab10 + "\n");
-            File.AppendAllText(unrpycpy, unrpyccab11 + "\n");
-            File.AppendAllText(unrpycpy, unrpyccab12 + "\n");*/
-            //File.Create(unrpycpy);
-            File.Create(deobfuscate);
-
-            //PowerShell ps = PowerShell.Create();
-            //ps.AddCommand("& { [IO.File]::WriteAllBytes(\"%decompcabps%\", [Convert]::FromBase64String([IO.File]::ReadAllText(\"%decompcabps%.tmp\"))) }");
-            //ps.Invoke();
-
-            Process.Start('"' + "powershell.exe" + '"' + " -nologo -noprofile -noninteractive -command " + '"' + "& { [IO.File]::WriteAllBytes(\"" + decompcab + "\", [Convert]::FromBase64String([IO.File]::ReadAllText(\"" + decompcab + ".tmp\"))) }" + '"');
-
-            Console.WriteLine("Extracting _decomp.cab...");
-            //Process.Start("mkdir " + '"' + decompilerdir + '"');
-            
-            /*if (Directory.Exists(decompilerdir))
-            {
-                File.Move(decompcab, decompilerdir);
-                File.Move(unrpycpy, decompilerdir);
-                File.Move(deobfuscate, decompilerdir);
-            }*/
-
-            Console.WriteLine("Searching for rpyc files...");
-            var result = Directory.EnumerateFiles(gamedir, "*.rpyc");
-            foreach (var file in result)
-            {
-                if (File.Exists(file)) {
-                    Console.WriteLine(file);
-                    Console.WriteLine("Decompiling");
-                    var fileSize = new FileInfo(file).Length;
-                    Console.WriteLine(fileSize);
-                    Process.Start('"' + pythondir + "python.exe" + '"' + " -O " + '"' + unrpycpy + '"' + " -c --init-offset " + '"' + file + '"');
+                string decompilerdir = currentdir + @"\decompiler\";
+                Directory.CreateDirectory(decompilerdir);
+                string decompcab = decompilerdir + "_decomp.cab";
+                string decompcab1 = decompilerdir + "_decomp.cab.tmp";
+                string unrpycpy = decompilerdir + "unrpyc.py";
+                File.Create(unrpycpy);
+                string deobfuscate = decompilerdir + "deobfuscate.py";
+                if (File.Exists(gamedir + "*.rpyc"))
+                {
+                    Console.WriteLine("No .rpyc files found in " + gamedir + "!");
+                    finish();
                 }
-            }
+                if (File.Exists(decompcab))
+                {
+                    File.Delete(decompcab);
+                }
+                if (File.Exists(decompilerdir))
+                {
+                    Process.Start("rmdir /Q /S " + '"' + decompilerdir + '"');
+                }
+                if (!File.Exists(unrpycpy))
+                {
+                    File.Delete(unrpycpy);
+                }
 
-            Console.WriteLine("Cleaning up temporary files...");
-            //Directory.Delete(decompilerdir, true);
+                //File.AppendAllText(decompcab, decompcab01 + "\n");
+                File.AppendAllText(decompcab, decompcab02 + "\n");
+                File.AppendAllText(decompcab, decompcab03 + "\n");
+                File.AppendAllText(decompcab, decompcab04 + "\n");
+                File.AppendAllText(decompcab, decompcab05 + "\n");
+                File.AppendAllText(decompcab, decompcab06 + "\n");
+                File.AppendAllText(decompcab, decompcab07 + "\n");
+                File.AppendAllText(decompcab, decompcab08 + "\n");
+                File.AppendAllText(decompcab, decompcab09 + "\n");
+                File.AppendAllText(decompcab, decompcab10 + "\n");
+                File.AppendAllText(decompcab, decompcab11 + "\n");
+                File.AppendAllText(decompcab, decompcab12 + "\n");
+                File.AppendAllText(decompcab, decompcab13 + "\n");
+                File.AppendAllText(decompcab, decompcab14 + "\n");
+                File.AppendAllText(decompcab, decompcab15 + "\n");
+                File.AppendAllText(decompcab, decompcab16 + "\n");
+
+                File.AppendAllText(decompcab1, decompcab02 + "\n");
+                File.AppendAllText(decompcab1, decompcab03 + "\n");
+                File.AppendAllText(decompcab1, decompcab04 + "\n");
+                File.AppendAllText(decompcab1, decompcab05 + "\n");
+                File.AppendAllText(decompcab1, decompcab06 + "\n");
+                File.AppendAllText(decompcab1, decompcab07 + "\n");
+                File.AppendAllText(decompcab1, decompcab08 + "\n");
+                File.AppendAllText(decompcab1, decompcab09 + "\n");
+                File.AppendAllText(decompcab1, decompcab10 + "\n");
+                File.AppendAllText(decompcab1, decompcab11 + "\n");
+                File.AppendAllText(decompcab1, decompcab12 + "\n");
+                File.AppendAllText(decompcab1, decompcab13 + "\n");
+                File.AppendAllText(decompcab1, decompcab14 + "\n");
+                File.AppendAllText(decompcab1, decompcab15 + "\n");
+                File.AppendAllText(decompcab1, decompcab16 + "\n");
+
+                /*File.AppendAllText(unrpycpy, unrpyccab01 + "\n");
+                File.AppendAllText(unrpycpy, unrpyccab02 + "\n");
+                File.AppendAllText(unrpycpy, unrpyccab03 + "\n");
+                File.AppendAllText(unrpycpy, unrpyccab04 + "\n");
+                File.AppendAllText(unrpycpy, unrpyccab05 + "\n");
+                File.AppendAllText(unrpycpy, unrpyccab06 + "\n");
+                File.AppendAllText(unrpycpy, unrpyccab07 + "\n");
+                File.AppendAllText(unrpycpy, unrpyccab08 + "\n");
+                File.AppendAllText(unrpycpy, unrpyccab09 + "\n");
+                File.AppendAllText(unrpycpy, unrpyccab10 + "\n");
+                File.AppendAllText(unrpycpy, unrpyccab11 + "\n");
+                File.AppendAllText(unrpycpy, unrpyccab12 + "\n");*/
+                //File.Create(unrpycpy);
+                File.Create(deobfuscate);
+
+                //PowerShell ps = PowerShell.Create();
+                //ps.AddCommand("& { [IO.File]::WriteAllBytes(\"%decompcabps%\", [Convert]::FromBase64String([IO.File]::ReadAllText(\"%decompcabps%.tmp\"))) }");
+                //ps.Invoke();
+
+                Process.Start('"' + "powershell.exe" + '"' + " -nologo -noprofile -noninteractive -command " + '"' + "& { [IO.File]::WriteAllBytes(\"" + decompcab + "\", [Convert]::FromBase64String([IO.File]::ReadAllText(\"" + decompcab1 + "\"))) }" + '"');
+
+                Console.WriteLine("Extracting _decomp.cab...");
+                //Process.Start("mkdir " + '"' + decompilerdir + '"');
+
+                /*if (Directory.Exists(decompilerdir))
+                {
+                    File.Move(decompcab, decompilerdir);
+                    File.Move(unrpycpy, decompilerdir);
+                    File.Move(deobfuscate, decompilerdir);
+                }*/
+
+                Console.WriteLine("Searching for rpyc files...");
+                var result = Directory.EnumerateFiles(gamedir, "*.rpyc");
+                foreach (var file in result)
+                {
+                    if (File.Exists(file))
+                    {
+                        Console.WriteLine(file);
+                        Console.WriteLine("Decompiling");
+                        var fileSize = new FileInfo(file).Length;
+                        Console.WriteLine(fileSize);
+                        Process.Start('"' + pythondir + "python.exe" + '"' + " -O " + '"' + unrpycpy + '"' + " -c --init-offset " + '"' + file + '"');
+                    }
+                }
+                decompdir = decompilerdir;
+                //Console.WriteLine("Cleaning up temporary files...");
+                //Directory.Delete(decompilerdir, true);
+            }
+            catch
+            {
+                Console.WriteLine("Error");
+            }
+            finally
+            {
+                Console.WriteLine("Cleaning up temporary files...");
+                //Directory.Delete(decompdir, true);
+            }
         }
         static void finish()
         {
